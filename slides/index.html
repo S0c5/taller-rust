@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Rust: ¡Una sola librería, mil plataformas!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --neobrutalism-primary: #FF6B6B;
+            --neobrutalism-secondary: #4ECDC4;
+            --neobrutalism-accent: #FFE66D;
+            --neobrutalism-dark: #2C3E50;
+            --neobrutalism-light: #F7F9FC;
+        }
+
+        .reveal {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+        }
+
+        .reveal h1 {
+            color: var(--neobrutalism-primary);
+            font-size: 1.6em;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 0.2em;
+        }
+
+        .reveal h2 {
+            color: var(--neobrutalism-dark);
+            font-size: 1.2em;
+            font-weight: 800;
+            border-bottom: 2px solid var(--neobrutalism-accent);
+            padding-bottom: 0.1em;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h3 {
+            font-size: 1em;
+            margin-bottom: 0.2em;
+        }
+
+        .reveal p, .reveal li {
+            font-size: 0.9em;
+            line-height: 1.2;
+            margin-bottom: 0.2em;
+        }
+
+        .reveal blockquote {
+            background: var(--neobrutalism-accent);
+            border-left: 4px solid var(--neobrutalism-primary);
+            padding: 0.3em 0.8em;
+            margin: 0.3em 0;
+            box-shadow: 4px 4px 0 var(--neobrutalism-dark);
+            font-size: 0.85em;
+        }
+
+        .reveal pre {
+            background: var(--neobrutalism-dark);
+            border-radius: 4px;
+            box-shadow: 4px 4px 0 var(--neobrutalism-primary);
+            margin: 0.3em 0;
+            font-size: 0.7em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .reveal code {
+            font-family: 'Fira Code', monospace;
+            background: var(--neobrutalism-dark);
+            color: var(--neobrutalism-light);
+            padding: 0.1em 0.2em;
+            border-radius: 2px;
+            font-size: 0.85em;
+        }
+
+        .reveal table {
+            border: 2px solid var(--neobrutalism-dark);
+            box-shadow: 4px 4px 0 var(--neobrutalism-primary);
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal th {
+            background: var(--neobrutalism-primary);
+            color: white;
+            padding: 0.2em;
+        }
+
+        .reveal td {
+            border: 1px solid var(--neobrutalism-dark);
+            padding: 0.2em;
+        }
+
+        .reveal .slides {
+            text-align: left;
+        }
+
+        .reveal .slides section {
+            padding: 0.5em;
+        }
+
+        .reveal ul, .reveal ol {
+            margin: 0.2em 0;
+            padding-left: 1.2em;
+        }
+
+        .reveal ul ul, .reveal ol ol {
+            margin: 0.1em 0;
+        }
+
+        .reveal .slides section > * {
+            margin-top: 0.2em;
+            margin-bottom: 0.2em;
+        }
+
+        .reveal pre code {
+            padding: 0.5em;
+            line-height: 1.2;
+        }
+
+        .reveal td, .reveal th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1 -->
+            <section>
+                <h1>Taller Rust: ¡Una sola librería, mil plataformas! 🦀✨</h1>
+                <h2>Escribe - Construye - Flashea: Rust from Web to Flipper</h2>
+                <p>Facilitador: <strong>David Barinas</strong></p>
+                <h3>Meta de la sesión (2 h):</h3>
+                <ol>
+                    <li>Descubrir por qué Rust = performance + seguridad + reutilización.</li>
+                    <li>Crear y usar la librería <code>hola_mundo</code> tanto en WebAssembly como en un Flipper Zero (Arm Cortex‑M4).</li>
+                    <li>Salir con un demo vivo en tu navegador <strong>y</strong> en tu dispositivo.</li>
+                </ol>
+                <blockquote>
+                    <em>Pro tip:</em> Levanta la mano cada vez que veas 🦀 para escribir código al instante.
+                </blockquote>
+            </section>
+
+            <!-- Slide 2 -->
+            <section>
+                <h2>¿Qué es Rust?</h2>
+                <ul>
+                    <li>Lenguaje de sistemas iniciado en Mozilla (2010) ➜ hoy comunidad global.</li>
+                    <li><strong>Seguridad de memoria</strong> <em>sin</em> GC: adiós <code>segmentation fault</code>.</li>
+                    <li>Velocidad al nivel de C/C++ (zero‑cost abstractions).</li>
+                    <li>Compilador que es tu coach: mensajes claros, detecta <em>race‑conditions</em>.</li>
+                    <li>Ecosistema <code>cargo</code> + <code>crates.io</code>: una línea y traes súper‑poderes.</li>
+                </ul>
+                <blockquote>
+                    <em>Rust no es magia; es ciencia bien empaquetada.</em>
+                </blockquote>
+            </section>
+
+            <!-- Slide 3 -->
+            <section>
+                <h2>Rust vs. el mundo 🌍</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>⚙️ Aspecto</th>
+                            <th><strong>Rust</strong></th>
+                            <th>C/C++</th>
+                            <th>Java</th>
+                            <th>Go</th>
+                            <th>Python</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Memoria</td>
+                            <td>Ownership/Borrowing (sin GC)</td>
+                            <td>Manual / RAII</td>
+                            <td>GC (G1, ZGC)</td>
+                            <td>GC pausas</td>
+                            <td>GC ref‑count</td>
+                        </tr>
+                        <tr>
+                            <td>Paradigma</td>
+                            <td>Multi (FP + sistemas)</td>
+                            <td>Imperativo</td>
+                            <td>OOP</td>
+                            <td>CSP</td>
+                            <td>Scripting</td>
+                        </tr>
+                        <tr>
+                            <td>Concurrency</td>
+                            <td>Sin data races</td>
+                            <td>Undefined Behavior</td>
+                            <td>Threads + JVM</td>
+                            <td>Goroutines</td>
+                            <td>GIL</td>
+                        </tr>
+                        <tr>
+                            <td>Herramientas</td>
+                            <td><code>cargo</code>, <code>clippy</code></td>
+                            <td>Make/CMake</td>
+                            <td>Maven/Gradle</td>
+                            <td><code>go</code></td>
+                            <td>Pip</td>
+                        </tr>
+                        <tr>
+                            <td>WebAssembly</td>
+                            <td>Soporte 1ª clase</td>
+                            <td>Avanzado</td>
+                            <td>TeaVM</td>
+                            <td>Parcial</td>
+                            <td>Pyodide</td>
+                        </tr>
+                        <tr>
+                            <td>Rendimiento*</td>
+                            <td>1x (base)</td>
+                            <td>0.9x-1.1x</td>
+                            <td>1.4x-2x más rápido</td>
+                            <td>1.2x-1.7x más rápido</td>
+                            <td>5x-10x más rápido</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 0.8em; margin-top: 0.5em;">* Rendimiento relativo en operaciones intensivas de CPU (benchmarks reales). Los números indican cuántas veces más rápido es Rust.</p>
+                <blockquote>
+                    <strong>Conclusión:</strong> Rust mezcla la nitidez del bisturí de C con los guantes de seguridad de un quirófano, mientras mantiene un rendimiento cercano a C/C++.
+                </blockquote>
+            </section>
+
+            <!-- Slide 4 -->
+            <section>
+                <h2>¿Cuándo usar Rust?</h2>
+                <ol>
+                    <li><strong>Embebido</strong>: firmware, IoT, drones.</li>
+                    <li><strong>Core de rendimiento</strong> de apps multiplataforma (FFI con JS, Kotlin, Swift).</li>
+                    <li>Criptografía/blockchain: cada byte importa.</li>
+                    <li>Servidores de baja latencia (Discord usa Rust en audio).</li>
+                    <li>Reemplazar C++ legacy sin 💥.</li>
+                </ol>
+                <blockquote>
+                    <em>Regla ninja:</em> Si el bug puede quemar tu bolsillo o tu reputación, evalúa Rust.
+                </blockquote>
+            </section>
+
+            <!-- Sintaxis Básica -->
+            <section>
+                <h2>Sintaxis Básica: Variables y Tipos 🎯</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Variables y Mutabilidad</h3>
+                        <pre><code class="rust">// Inmutabilidad por defecto
+let x = 5;
+// x = 6; // Error: no se puede reasignar
+
+// Mutabilidad explícita
+let mut y = 5;
+y = 6; // OK
+
+// Constantes
+const MAX_POINTS: u32 = 100_000;</code></pre>
+                    </div>
+                    <div>
+                        <h3>Tipos Básicos</h3>
+                        <pre><code class="rust">// Números
+let entero: i32 = 42;
+let flotante: f64 = 3.14;
+
+// Booleanos
+let verdadero: bool = true;
+
+// Caracteres
+let emoji: char = '🦀';
+
+// Strings
+let texto: &str = "Hola Rust";</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>En Rust, la seguridad comienza con el sistema de tipos.</em>
+                </blockquote>
+            </section>
+
+            <!-- Control de Flujo -->
+            <section>
+                <h2>Control de Flujo y Funciones 🔄</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>If, Match y Loops</h3>
+                        <pre><code class="rust">// If como expresión
+let numero = if x > 0 { x } else { -x };
+
+// Match exhaustivo
+match numero {
+    0 => println!("Cero"),
+    1..=10 => println!("Pequeño"),
+    _ => println!("Grande"),
+}
+
+// Loops con labels
+'outer: loop {
+    'inner: loop {
+        break 'outer; // Rompe el loop exterior
+    }
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Funciones y Retornos</h3>
+                        <pre><code class="rust">// Función con tipo de retorno
+fn suma(a: i32, b: i32) -> i32 {
+    a + b // Retorno implícito
+}
+
+// Función con múltiples retornos
+fn divide(a: f64, b: f64) -> Option<f64> {
+    if b == 0.0 {
+        None
+    } else {
+        Some(a / b)
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Rust te fuerza a manejar todos los casos posibles.</em>
+                </blockquote>
+            </section>
+
+            <!-- Estructuras de Datos -->
+            <section>
+                <h2>Estructuras y Enums 🏗️</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Structs y Implementaciones</h3>
+                        <pre><code class="rust">struct Usuario {
+    nombre: String,
+    edad: u32,
+    activo: bool,
+}
+
+impl Usuario {
+    fn new(nombre: String, edad: u32) -> Self {
+        Usuario {
+            nombre,
+            edad,
+            activo: true,
+        }
+    }
+
+    fn es_mayor_de_edad(&self) -> bool {
+        self.edad >= 18
+    }
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Enums y Pattern Matching</h3>
+                        <pre><code class="rust">enum Estado {
+    Activo,
+    Inactivo,
+    Bloqueado { razon: String },
+}
+
+fn verificar_estado(estado: Estado) {
+    match estado {
+        Estado::Activo => println!("Usuario activo"),
+        Estado::Inactivo => println!("Usuario inactivo"),
+        Estado::Bloqueado { razon } => 
+            println!("Usuario bloqueado: {}", razon),
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Los enums en Rust son más poderosos que en otros lenguajes.</em>
+                </blockquote>
+            </section>
+
+            <!-- Ownership y Borrowing -->
+            <section>
+                <h2>Ownership y Borrowing 🛡️</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Ownership Rules</h3>
+                        <pre><code class="rust">fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1; // s1 se mueve a s2
+    // println!("{}", s1); // Error: s1 ya no es válido
+    
+    let s3 = s2.clone(); // Clonación explícita
+    println!("{} {}", s2, s3); // OK
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Referencias y Lifetimes</h3>
+                        <pre><code class="rust">fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+fn main() {
+    let s1 = String::from("corto");
+    let resultado;
+    {
+        let s2 = String::from("más largo");
+        resultado = longest(&s1, &s2);
+    }
+    // println!("{}", resultado); // Error: s2 no vive lo suficiente
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>El sistema de ownership previene errores en tiempo de compilación.</em>
+                </blockquote>
+            </section>
+
+            <!-- Lifetimes -->
+            <section>
+                <h2>Lifetimes en Rust ⏳</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Lifetimes Básicos</h3>
+                        <pre><code class="rust">// Lifetime implícito
+fn primera_palabra(s: &str) -> &str {
+    s.split_whitespace()
+        .next()
+        .unwrap_or("")
+}
+
+// Lifetime explícito
+fn primera_palabra<'a>(s: &'a str) -> &'a str {
+    s.split_whitespace()
+        .next()
+        .unwrap_or("")
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Lifetimes en Estructuras</h3>
+                        <pre><code class="rust">// Estructura con referencia
+struct Iterador<'a> {
+    datos: &'a [i32],
+    posicion: usize,
+}
+
+impl<'a> Iterador<'a> {
+    fn new(datos: &'a [i32]) -> Self {
+        Iterador {
+            datos,
+            posicion: 0,
+        }
+    }
+
+    fn siguiente(&mut self) -> Option<&'a i32> {
+        if self.posicion < self.datos.len() {
+            let item = &self.datos[self.posicion];
+            self.posicion += 1;
+            Some(item)
+        } else {
+            None
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Los lifetimes son la forma de Rust de garantizar que las referencias sean válidas durante todo su uso.</em>
+                </blockquote>
+            </section>
+
+            <!-- Traits y Genéricos -->
+            <section>
+                <h2>Traits y Genéricos Avanzados 🚀</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Traits y Implementaciones</h3>
+                        <pre><code class="rust">trait Dibujable {
+    fn dibujar(&self);
+    fn area(&self) -> f64;
+}
+
+struct Circulo {
+    radio: f64,
+}
+
+impl Dibujable for Circulo {
+    fn dibujar(&self) {
+        println!("Dibujando círculo");
+    }
+    
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * self.radio * self.radio
+    }
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Genéricos y Bounds</h3>
+                        <pre><code class="rust">fn ordenar<T: Ord + Clone>(items: &mut [T]) {
+    items.sort();
+}
+
+struct Contenedor<T: Dibujable> {
+    item: T,
+}
+
+impl<T: Dibujable> Contenedor<T> {
+    fn new(item: T) -> Self {
+        Contenedor { item }
+    }
+    
+    fn dibujar_contenido(&self) {
+        self.item.dibujar();
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Los traits son la forma de Rust de lograr polimorfismo sin herencia.</em>
+                </blockquote>
+            </section>
+
+            <!-- WebAssembly Slides -->
+            <section>
+                <h2>WebAssembly: Historia y Rendimiento 🌐</h2>
+                <ul>
+                    <li><strong>2015:</strong> Mozilla, Google, Microsoft y Apple unen fuerzas.</li>
+                    <li><strong>2017:</strong> Primer borrador de la especificación.</li>
+                    <li><strong>2019:</strong> Soporte en todos los navegadores modernos.</li>
+                </ul>
+                <h3>Rendimiento</h3>
+                <ul>
+                    <li>Ejecución cercana a velocidad nativa (1.2x más lento que C).</li>
+                    <li>Binario compacto (10-100x más pequeño que JS).</li>
+                    <li>Sin JIT, sin GC, sin pausas.</li>
+                </ul>
+                <blockquote>
+                    <em>WebAssembly es como tener un motor de F1 en tu navegador.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>WebAssembly: Ejemplos Prácticos 🚀</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>1. Cálculos Intensivos</h3>
+                        <pre><code class="rust">#[wasm_bindgen]
+pub fn procesar_imagen(pixels: &[u8]) -> Vec<u8> {
+    pixels.iter()
+        .map(|&p| p.saturating_mul(2))
+        .collect()
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>2. Juegos y Gráficos</h3>
+                        <pre><code class="rust">#[wasm_bindgen]
+pub fn actualizar_fisica(
+    posiciones: &mut [f32],
+    velocidades: &[f32],
+    dt: f32
+) {
+    for (pos, vel) in posiciones.iter_mut()
+        .zip(velocidades.iter()) {
+        *pos += vel * dt;
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Rust + WASM = Performance web sin sacrificar seguridad.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>WebAssembly: ¿Cuándo Usarlo? 🎯</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Casos Ideales</h3>
+                        <ul>
+                            <li>Procesamiento de imágenes/video</li>
+                            <li>Simulaciones físicas</li>
+                            <li>Criptografía en el cliente</li>
+                            <li>Compiladores en el navegador</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Evitar Cuando</h3>
+                        <ul>
+                            <li>UI simple y estática</li>
+                            <li>Apps CRUD básicas</li>
+                            <li>Requiere acceso DOM frecuente</li>
+                            <li>Equipo sin experiencia en sistemas</li>
+                        </ul>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>WASM no reemplaza JS, lo complementa donde más importa.</em>
+                </blockquote>
+            </section>
+
+            <!-- Flipper Zero Slides -->
+            <section>
+                <h2>Flipper Zero: Historia y Hardware 🐬</h2>
+                <ul>
+                    <li><strong>2020:</strong> Kickstarter exitoso (4.8M USD).</li>
+                    <li><strong>2021:</strong> Primeras unidades entregadas.</li>
+                    <li><strong>2023:</strong> Comunidad activa de 100K+ usuarios.</li>
+                </ul>
+                <h3>Especificaciones</h3>
+                <ul>
+                    <li>STM32WB55 (Cortex-M4F a 64MHz).</li>
+                    <li>256KB RAM, 1MB Flash.</li>
+                    <li>Sub-GHz, NFC, RFID, Bluetooth.</li>
+                </ul>
+                <blockquote>
+                    <em>El "Swiss Army Knife" de la seguridad digital.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>Flipper Zero: Ejemplos de Código ⚡</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>1. Control de GPIO</h3>
+                        <pre><code class="rust">#[entry]
+fn main() -> ! {
+    let led = Pin::new(LED_RED);
+    loop {
+        led.set_high();
+        delay_ms(500);
+        led.set_low();
+        delay_ms(500);
+    }
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>2. Comunicación UART</h3>
+                        <pre><code class="rust">#[entry]
+fn main() -> ! {
+    let uart = Uart::new(UART1);
+    uart.write_str("Hola desde Flipper!\r\n");
+    loop {
+        if let Some(byte) = uart.read_byte() {
+            uart.write_byte(byte);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Rust en Flipper = Control preciso sin segfaults.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>Flipper Zero: Casos de Uso 🎯</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Perfecto Para</h3>
+                        <ul>
+                            <li>Testing de seguridad</li>
+                            <li>Prototipado IoT</li>
+                            <li>Educación en sistemas embebidos</li>
+                            <li>Automatización RF</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Consideraciones</h3>
+                        <ul>
+                            <li>Memoria limitada</li>
+                            <li>Sin sistema operativo</li>
+                            <li>Requiere conocimientos de bajo nivel</li>
+                            <li>Comunidad en crecimiento</li>
+                        </ul>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Flipper + Rust = Plataforma perfecta para aprender sistemas embebidos.</em>
+                </blockquote>
+            </section>
+
+            <!-- Slide 10 -->
+            <section>
+                <h2>¡Manos a la obra! (mini‑reto 30 min) 💻🔥</h2>
+                <ol>
+                    <li><strong>Clone</strong> repo plantilla (<code>git clone ...</code>).</li>
+                    <li>Ejecuta tests host: <code>cargo test</code>.</li>
+                    <li>Build WASM ➜ <code>npm run serve</code> ➜ abre <code>/demo</code>.</li>
+                    <li>Build para Flipper, flashea, mira LED.</li>
+                    <li><strong>Extiende</strong>: agrega <code>fn sumar(a, b) -> i32</code> al core y úsalo en ambos wrappers.</li>
+                </ol>
+                <blockquote>
+                    Primeros 3 en hacer PR reciben sticker 🦀.
+                </blockquote>
+            </section>
+
+            <!-- Slide 11 -->
+            <section>
+                <h2>Recursos y comunidad</h2>
+                <ul>
+                    <li><em>The Rust Book</em> (gratis online).</li>
+                    <li><code>wasm‑bindgen</code> guía oficial.</li>
+                    <li>Template <code>flipperzero-rust</code> (GitHub).</li>
+                    <li>Comunidad <strong>Rust‑Latam</strong> (Telegram) y <strong>Bogotá Rust</strong> meetups.</li>
+                    <li>Curso "Zero To Prod" para backend.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 12 -->
+            <section>
+                <h2>Cierre épico 😎</h2>
+                <ul>
+                    <li>¿Qué vas a construir con Rust esta semana?</li>
+                    <li>Feedback flash (Mentimeter QR).</li>
+                    <li>¡Gracias y hasta el próximo hack! 🦀</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            center: false,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            controls: true,
+            progress: true,
+            slideNumber: true,
+            autoPlayMedia: true,
+            viewDistance: 3,
+            mouseWheel: true,
+            plugins: []
+        });
+
+        // Initialize syntax highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+
+        // Re-highlight code blocks when slides change
+        Reveal.on('slidechanged', event => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+</html> 

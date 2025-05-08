@@ -1,0 +1,23 @@
+cargo-features = ["different-binary-name"]
+
+[package]
+name = "hello-world-flipper"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.81.0"
+autobins = false
+autoexamples = false
+autotests = false
+autobenches = false
+
+[[bin]]
+name = "hello-world-flipper"
+filename = "hello-world.fap"
+bench = false
+test = false
+
+[dependencies]
+flipperzero = { version = "0.15.0" }
+flipperzero-sys = { version = "0.15.0" }
+flipperzero-rt = { version = "0.15.0" }
+hello-world-lib = { path = "../lib" } 

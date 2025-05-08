@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "lib",
+    "js",
+    "flipper"
+]
+resolver = "2" 
