@@ -149,7 +149,114 @@
                 </blockquote>
             </section>
 
-            <!-- Slide 2 -->
+            <!-- Stack and Heap Section -->
+            <section>
+                <h2>Memoria: Stack vs Heap 🧠</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Stack (Pila)</h3>
+                        <ul>
+                            <li>Memoria <strong>ordenada</strong> y <strong>contigua</strong></li>
+                            <li>Acceso <strong>rápido</strong> (LIFO)</li>
+                            <li>Tamaño <strong>fijo</strong> por thread</li>
+                            <li>Variables <strong>locales</strong> y <strong>temporales</strong></li>
+                            <li>Liberación <strong>automática</strong></li>
+                        </ul>
+                        <pre><code class="rust">fn ejemplo_stack() {
+    let x = 5;      // Stack
+    let y = 10;     // Stack
+    let z = x + y;  // Stack
+}</code></pre>
+                    </div>
+                    <div>
+                        <h3>Heap (Montón)</h3>
+                        <ul>
+                            <li>Memoria <strong>desordenada</strong></li>
+                            <li>Acceso <strong>más lento</strong></li>
+                            <li>Tamaño <strong>dinámico</strong></li>
+                            <li>Datos de <strong>largo plazo</strong></li>
+                            <li>Requiere <strong>gestión manual</strong></li>
+                        </ul>
+                        <pre><code class="rust">fn ejemplo_heap() {
+    let s = String::from("hola");  // Heap
+    let v = vec![1, 2, 3];        // Heap
+}</code></pre>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>Entender la diferencia entre Stack y Heap es crucial para dominar Rust.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>Stack vs Heap: Visualización 🎨</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Stack</h3>
+                        <pre><code class="text">┌─────────────┐
+│   z = 15    │
+├─────────────┤
+│   y = 10    │
+├─────────────┤
+│   x = 5     │
+└─────────────┘</code></pre>
+                        <ul>
+                            <li>Ordenado y predecible</li>
+                            <li>Acceso directo por offset</li>
+                            <li>Sin fragmentación</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Heap</h3>
+                        <pre><code class="text">┌─────────────┐
+│  [1,2,3]    │
+├─────────────┤
+│  "hola"     │
+├─────────────┤
+│  [4,5,6]    │
+└─────────────┘</code></pre>
+                        <ul>
+                            <li>Disperso y dinámico</li>
+                            <li>Acceso por punteros</li>
+                            <li>Puede fragmentarse</li>
+                        </ul>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>El Stack es como una pila de libros, el Heap como una biblioteca.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>Stack vs Heap: Casos de Uso 🎯</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                    <div>
+                        <h3>Usar Stack Cuando</h3>
+                        <ul>
+                            <li>Tamaño conocido en compilación</li>
+                            <li>Datos temporales</li>
+                            <li>Variables locales</li>
+                            <li>Tipos primitivos</li>
+                            <li>Arrays de tamaño fijo</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Usar Heap Cuando</h3>
+                        <ul>
+                            <li>Tamaño desconocido</li>
+                            <li>Datos persistentes</li>
+                            <li>Colecciones dinámicas</li>
+                            <li>Strings largos</li>
+                            <li>Recursos compartidos</li>
+                        </ul>
+                    </div>
+                </div>
+                <blockquote>
+                    <em>La elección entre Stack y Heap afecta el rendimiento y la seguridad de tu programa.</em>
+                </blockquote>
+            </section>
+
+            <!-- ¿Qué es Rust? Section -->
             <section>
                 <h2>¿Qué es Rust?</h2>
                 <ul>
