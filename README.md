@@ -26,6 +26,7 @@ This workshop demonstrates how to create and reuse a library across multiple pla
 - Rust 1.70+
 - CMake 3.20+
 - Git
+- wasm-pack (install via `cargo install wasm-pack`)
 
 ## Building the Project
 
